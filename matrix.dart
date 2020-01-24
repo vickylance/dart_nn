@@ -1,25 +1,66 @@
 import 'dart:math';
 
-// Immutable Matrix Class
+// Matrix Class
 class Matrix {
   int rows;
   int cols;
   List<List<double>> matrix;
-  Random rnd = new Random();
+  Random rnd = Random();
 
-  Matrix(int rows, int cols, {int rngSeed = null}) {
+  Matrix(int rows, int cols, { int rngSeed = null }) {
     this.rows = rows;
     this.cols = cols;
     if(rngSeed != null) {
-      rnd = new Random(rngSeed);
+      rnd = Random(rngSeed);
     }
-    this.matrix = new List.generate(this.rows, (_) => new List(this.cols));
+    this.matrix = List.generate(rows, (_) => List(cols));
+    this.ones();
+  }
 
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
-        matrix[i][j] = 0.0;
+  static Matrix fromArray(List<double> arr) {
+    Matrix result = Matrix(arr.length, 1);
+    for(int i = 0; i < arr.length; i++) {
+      result.matrix[i][0] = arr[i];
+    }
+    return result;
+  }
+
+  static Matrix dotProduct(Matrix a, Matrix b) {
+    // Dot product
+    if(a.cols != b.rows) {
+      throw ("The columns of A = ${a.cols} must match rows of B = ${b.rows}");
+    }
+    Matrix result = Matrix(a.rows, b.cols);
+    for(int i = 0; i < result.rows; i++) {
+      for(int j = 0; j < result.cols; j++) {
+        var sum = 0.0;
+        for(int k = 0; k < a.cols; k++) {
+          sum += a.matrix[i][k] * b.matrix[k][j];
+        }
+        result.matrix[i][j] = sum;
       }
     }
+    return result;
+  }
+
+  static Matrix clone(Matrix x) {
+    Matrix result = Matrix(x.rows, x.cols);
+    for(int i = 0; i < x.rows; i++) {
+      for(int j = 0; j < x.cols; j++) {
+        result.matrix[i][j] = x.matrix[i][j];
+      }
+    }
+    return result;
+  }
+
+  static Matrix transpose(Matrix x) {
+    Matrix result = Matrix(x.cols, x.rows);
+    for(int i = 0; i < x.rows; i++) {
+      for(int j = 0; j < x.cols; j++) {
+        result.matrix[j][i] = x.matrix[i][j];
+      }
+    }
+    return result;
   }
 
   Matrix map(Function fn) {
@@ -32,104 +73,59 @@ class Matrix {
     return this;
   }
 
-  Matrix clone() {
-    Matrix result = new Matrix(rows, cols);
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
-        result.matrix[i][j] = matrix[i][j];
-      }
-    }
-    return result;
-  }
-
-  Matrix transpose() {
-    Matrix result = new Matrix(cols, rows);
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
-        result.matrix[j][i] = matrix[i][j];
-      }
-    }
-    return result;
-  }
-
-  Matrix multiply(var val, {bool hadamard = false}) {
-    if(val is Matrix && !hadamard) {
-      // Dot product
-      if(cols != val.rows) {
-        throw ("The colums of A must match rows of B $cols, ${val.rows}");
-      }
-      Matrix result = new Matrix(rows, val.cols);
-      var a = matrix;
-      var b = val.matrix;
-      for(int i = 0; i < result.rows; i++) {
-        for(int j = 0; j < result.cols; j++) {
-          var sum = 0.0;
-          for(int k = 0; k < cols; k++) {
-            sum += a[i][k] * b[k][j];
-          }
-          result.matrix[i][j] = sum;
-        }
-      }
-      return result;
-    }
-
-    Matrix result = clone();
+  Matrix multiply(var val, { bool hadamard = false }) {
     for(int i = 0; i < rows; i++) {
       for(int j = 0; j < cols; j++) {
         if(val is Matrix && hadamard) {
           // Hadamard product
-          result.matrix[i][j] *= val.matrix[i][j];
+          matrix[i][j] *= val.matrix[i][j];
         } else {
           // Scalar product
-          result.matrix[i][j] *= val;
+          matrix[i][j] *= val;
         }
       }
     }
-    return result;
+    return this;
   }
 
   Matrix add(var val) {
-    Matrix result = clone();
     for(int i = 0; i < rows; i++) {
       for(int j = 0; j < cols; j++) {
         if(val is Matrix) {
-          result.matrix[i][j] += val.matrix[i][j];
+          matrix[i][j] += val.matrix[i][j];
         } else {
-          result.matrix[i][j] += val;
+          matrix[i][j] += val;
         }
       }
     }
-    return result;
+    return this;
   }
 
   Matrix ones() {
-    Matrix result = clone();
     for(int i = 0; i < rows; i++) {
       for(int j = 0; j < cols; j++) {
-        result.matrix[i][j] = 1.0;
+        matrix[i][j] = 1.0;
       }
     }
-    return result;
+    return this;
   }
 
   Matrix zeros() {
-    Matrix result = clone();
     for(int i = 0; i < rows; i++) {
       for(int j = 0; j < cols; j++) {
-        result.matrix[i][j] = 0.0;
+        matrix[i][j] = 0.0;
       }
     }
-    return result;
+    return this;
   }
 
   Matrix randomize() {
-    Matrix result = clone();
     for(int i = 0; i < rows; i++) {
       for(int j = 0; j < cols; j++) {
-        result.matrix[i][j] = rnd.nextDouble();
+        matrix[i][j] = rnd.nextDouble() * 2 - 1;
       }
     }
-    return result;
+    return this;
   }
 
   String toString() {

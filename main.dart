@@ -1,23 +1,12 @@
 import 'dart:math';
 import './matrix.dart';
 import './activation.dart';
+import './neuralNetwork.dart';
 
 Random rnd = new Random();
 
 double map(double x, double in_min, double in_max, double out_min, double out_max) {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
-class NeuralNetwork {
-  int inputNodes;
-  int hiddenNodes;
-  int outputNodes;
-
-  NeuralNetwork(int inputNodes, int hiddenNodes, int outputNodes) {
-    this.inputNodes = inputNodes;
-    this.hiddenNodes = hiddenNodes;
-    this.outputNodes = outputNodes;
-  }
 }
 
 class Perceptron {
