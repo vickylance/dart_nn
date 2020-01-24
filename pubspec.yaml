@@ -1,0 +1,5 @@
+name: MyApp
+description: ""
+dependencies:
+  dart_numerics: null
+dev_dependencies: {}

@@ -1,5 +1,6 @@
 import 'dart:math';
 import './matrix.dart';
+import './activation.dart';
 
 Random rnd = new Random();
 
@@ -51,14 +52,18 @@ void main() {
   // print(m1);
   // print(m1.transpose());
   // print(m1);
-  print(m1);
-  print(m2);
-  print(m1.multiply(m2));
-  print(m1);
-  print(m2);
+  // print(m1);
+  // print(m2);
+  // print(m1.multiply(m2));
+  // print(m1);
+  // print(m2);
 
-  int x = 5;
-  print(x);
-  x = 10;
-  print(x);
+  // print(m1.map((x) => x*10));
+
+  // int x = 5;
+  // print(x);
+  // x = 10;
+  // print(x);
+
+  print(Activation.ArcTan(0.23, derivative: true));
 }

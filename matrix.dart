@@ -22,6 +22,26 @@ class Matrix {
     }
   }
 
+  Matrix map(Function fn) {
+    for(int i = 0; i < rows; i++) {
+      for(int j = 0; j < cols; j++) {
+        var val = matrix[i][j];
+        matrix[i][j] = fn(val, i, j);
+      }
+    }
+    return this;
+  }
+
+  Matrix clone() {
+    Matrix result = new Matrix(rows, cols);
+    for(int i = 0; i < rows; i++) {
+      for(int j = 0; j < cols; j++) {
+        result.matrix[i][j] = matrix[i][j];
+      }
+    }
+    return result;
+  }
+
   Matrix transpose() {
     Matrix result = new Matrix(cols, rows);
     for(int i = 0; i < rows; i++) {
@@ -29,11 +49,6 @@ class Matrix {
         result.matrix[j][i] = matrix[i][j];
       }
     }
-    // matrix = new List.generate(cols, (_) => new List(rows));
-    // int tmpCols = cols;
-    // cols = rows;
-    // rows = tmpCols;
-    // matrix = temp.matrix;
     return result;
   }
 
@@ -68,16 +83,6 @@ class Matrix {
           // Scalar product
           result.matrix[i][j] *= val;
         }
-      }
-    }
-    return result;
-  }
-
-  Matrix clone() {
-    Matrix result = new Matrix(rows, cols);
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
-        result.matrix[i][j] = matrix[i][j];
       }
     }
     return result;
