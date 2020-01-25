@@ -25,6 +25,16 @@ class Matrix {
     return result;
   }
 
+  static List<double> toArray(Matrix mat) {
+    List<double> result = [];
+    for(int i = 0; i < mat.rows; i++) {
+      for(int j = 0; j < mat.cols; j++) {
+        result.add(mat.matrix[i][j]);
+      }
+    }
+    return result;
+  }
+
   static Matrix dotProduct(Matrix a, Matrix b) {
     // Dot product
     if(a.cols != b.rows) {
@@ -63,11 +73,21 @@ class Matrix {
     return result;
   }
 
+  static Matrix immutableMap(Matrix m, Function fn) {
+    Matrix result = Matrix(m.rows, m.cols);
+    for(int i = 0; i < m.rows; i++) {
+      for(int j = 0; j < m.cols; j++) {
+        result.matrix[i][j] = fn(m.matrix[i][j]);
+      }
+    }
+    return result;
+  }
+
   Matrix map(Function fn) {
     for(int i = 0; i < rows; i++) {
       for(int j = 0; j < cols; j++) {
         var val = matrix[i][j];
-        matrix[i][j] = fn(val, i, j);
+        matrix[i][j] = fn(val);
       }
     }
     return this;
@@ -95,6 +115,19 @@ class Matrix {
           matrix[i][j] += val.matrix[i][j];
         } else {
           matrix[i][j] += val;
+        }
+      }
+    }
+    return this;
+  }
+
+  Matrix subtract(var val) {
+    for(int i = 0; i < rows; i++) {
+      for(int j = 0; j < cols; j++) {
+        if(val is Matrix) {
+          matrix[i][j] -= val.matrix[i][j];
+        } else {
+          matrix[i][j] -= val;
         }
       }
     }

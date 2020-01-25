@@ -2,11 +2,15 @@ import 'dart:math';
 import 'package:dart_numerics/dart_numerics.dart' as numerics;
 
 class Activation {
-  static List<double> Sigmoid(List<double> X, { bool derivative = false }) {
+  static double Sigmoid(double x, { bool derivative = false }) {
     if (!derivative) {
-      return X.map((x) => (1 / (1 + exp(-x)))).toList();
+      return 1 / (1 + exp(-x));
     }
-    return X.map((x) => (x * (1 - x))).toList();
+    return x * (1 - x);
+  }
+
+  static double DSigmoid(double x) {
+    return 1 / (1 + exp(-1 * x));
   }
 
   static List<double> Relu(List<double> X, { bool derivative = false }) {

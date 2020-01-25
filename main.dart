@@ -31,11 +31,15 @@ class Perceptron {
 void main() {
   //var p = new Perceptron();
   //print(p.weightedSum([0.8, 0.2]));
-  // NeuralNetwork brain = NeuralNetwork(3,4,1);
-  Matrix m1 = Matrix(3,4);
-  Matrix m2 = Matrix(4,3);
-  m1 = m1.randomize();
-  m2 = m2.randomize();
+  NeuralNetwork brain = NeuralNetwork(3,4,1);
+  Matrix inp = Matrix(3, 2);
+  inp.randomize();
+  //print(brain.feedForward([1.0,2.0,3.0]));
+  print(brain.train([1.0,2.0,3.0], [2.0]));
+  // Matrix m1 = Matrix(3,4);
+  // Matrix m2 = Matrix(4,3);
+  // m1 = m1.randomize();
+  // m2 = m2.randomize();
   // print(m1);
   // print(m1.multiply(2));
   // print(m1);
@@ -54,5 +58,5 @@ void main() {
   // x = 10;
   // print(x);
 
-  print(Activation.ArcTan(0.23, derivative: true));
+  // print(Activation.ArcTan(0.23, derivative: true));
 }
