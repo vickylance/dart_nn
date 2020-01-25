@@ -10,6 +10,7 @@ class NeuralNetwork {
   Matrix bias_h;
   Matrix bias_o;
   double learning_rate;
+  Activation activation_function;
 
   NeuralNetwork(int inputNodes, int hiddenNodes, int outputNodes) {
     this.inputNodes = inputNodes;
@@ -26,39 +27,35 @@ class NeuralNetwork {
     this.bias_h.randomize();
     this.bias_o.randomize();
 
-    this.learning_rate = 0.05;
+    this.setLearningRate();
+    this.setActivationFunction(Sigmoid);
   }
 
-  List<double> feedForward(var inputs) {
-    if(!(inputs is Matrix)) {
-      inputs = Matrix.fromArray(inputs);
-    }
-    //for(int i = 0; i < inputs.rows; i++) {
-    //}
+  List<double> predict(var input_array) {
+    var inputs = Matrix.fromArray(input_array);
     var hidden = Matrix.dotProduct(weights_ih, inputs);
     hidden.add(bias_h);
-    hidden.map(Activation.Sigmoid);
+    hidden.map(activation_function.func);
 
     var output = Matrix.dotProduct(weights_ho, hidden);
     output.add(bias_o);
-    output.map(Activation.Sigmoid);
+    output.map(activation_function.func);
 
     var output_arr = Matrix.toArray(output);
 
     return output_arr;
   }
 
-  Matrix train(var inputs, var targets) {
-    if(!(inputs is Matrix)) {
-      inputs = Matrix.fromArray(inputs);
-    }
+  train(var inputs_array, var targets) {
+    var inputs = Matrix.fromArray(inputs_array);
+
     var hidden = Matrix.dotProduct(weights_ih, inputs);
     hidden.add(bias_h);
-    hidden.map(Activation.Sigmoid);
+    hidden.map(activation_function.func);
 
     var outputs = Matrix.dotProduct(weights_ho, hidden);
     outputs.add(bias_o);
-    outputs.map(Activation.Sigmoid);
+    outputs.map(activation_function.func);
 
     // Convert arr to matrix object
     targets = Matrix.fromArray(targets);
@@ -67,7 +64,7 @@ class NeuralNetwork {
     var output_errors = targets.subtract(outputs);
 
     // Calculate the hidden->output gradients
-    var gradients = Matrix.immutableMap(outputs, Activation.DSigmoid);
+    var gradients = Matrix.immutableMap(outputs, activation_function.dfunc);
     gradients.multiply(output_errors, hadamard: true);
     gradients.multiply(learning_rate);
 
@@ -81,11 +78,10 @@ class NeuralNetwork {
 
     // Calculate the hidden layer error
     var who_t = Matrix.transpose(weights_ho);
-    print(who_t);
     var hidden_errors = Matrix.dotProduct(who_t, output_errors);
 
     // Calculate the input->hidden gradients
-    var hidden_gradient = Matrix.immutableMap(hidden, Activation.DSigmoid);
+    var hidden_gradient = Matrix.immutableMap(hidden, activation_function.dfunc);
     hidden_gradient.multiply(hidden_errors, hadamard: true);
     hidden_gradient.multiply(learning_rate);
 
@@ -96,5 +92,13 @@ class NeuralNetwork {
     // Update the input->hidden weights by the deltas
     weights_ih.add(weights_ih_deltas);
     bias_h.add(hidden_gradient);
+  }
+
+  setLearningRate({learning_rate = 0.1}) {
+    this.learning_rate = learning_rate;
+  }
+
+  setActivationFunction(activation_function) {
+    this.activation_function = activation_function;
   }
 }

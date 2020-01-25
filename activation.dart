@@ -1,57 +1,48 @@
 import 'dart:math';
 import 'package:dart_numerics/dart_numerics.dart' as numerics;
 
+
 class Activation {
-  static double Sigmoid(double x, { bool derivative = false }) {
-    if (!derivative) {
-      return 1 / (1 + exp(-x));
-    }
-    return x * (1 - x);
-  }
+  Function func;
+  Function dfunc;
 
-  static double DSigmoid(double x) {
-    return 1 / (1 + exp(-1 * x));
-  }
-
-  static List<double> Relu(List<double> X, { bool derivative = false }) {
-    if (!derivative) {
-      return X.map((x) => (x < 0 ? 0.0 : x)).toList();
-    }
-    return X.map((x) => (x < 0 ? 0.0 : 1.0)).toList();
-  }
-
-  static double TanH(double x, { bool derivative = false }) {
-    if (!derivative) {
-      return numerics.tanh(x);
-    }
-    return 1 - pow(Activation.TanH(x), 2);
-  }
-
-  static double ArcTan(double x, { bool derivative = false }) {
-    if (!derivative) {
-      return atan(x);
-    }
-    return 1 / (pow(x, 2) + 1);
-  }
-
-  static double ArcSinH(double x, { bool derivative = false }) {
-    if (!derivative) {
-      return numerics.asinh(x);
-    }
-    return 1 / sqrt((pow(x, 2) + 1));
-  }
-
-  static double BentIdentity(double x, { bool derivative = false }) {
-    if(!derivative) {
-      return ((sqrt(pow(x, 2) + 1) - 1) / 2) + x;
-    }
-    return (x / (2 * sqrt(pow(x, 2) + 1))) + 1;
-  }
-
-  static double Gaussian(double x, { bool derivative = false }) {
-    if(!derivative) {
-      return exp(pow(-1 * x, 2));
-    }
-    return -2 * x * exp(pow(-1 * x, 2));
+  Activation(Function func, Function dfunc) {
+    this.func = func;
+    this.dfunc = dfunc;
   }
 }
+
+Activation Sigmoid = Activation(
+  (double x) => 1 / (1 + exp(-1 * x)),
+  (double y) => y * (1 - y),
+);
+
+Activation Relu = Activation(
+  (double x) => x < 0 ? 0.0 : x,
+  (double y) => y < 0 ? 0.0 : 1.0,
+);
+
+Activation TanH = Activation(
+  (double x) => numerics.tanh(x),
+  (double y) => 1 - pow(numerics.tanh(y), 2),
+);
+
+Activation ArcTan = Activation(
+  (double x) => atan(x),
+  (double y) => 1 / (pow(y, 2) + 1),
+);
+
+Activation ArcSinH = Activation(
+  (double x) => numerics.asinh(x),
+  (double y) => 1 / sqrt((pow(y, 2) + 1)),
+);
+
+Activation BentIdentity = Activation(
+  (double x) => ((sqrt(pow(x, 2) + 1) - 1) / 2) + x,
+  (double y) => (y / (2 * sqrt(pow(y, 2) + 1))) + 1,
+);
+
+Activation Gaussian = Activation(
+  (double x) => exp(pow(-1 * x, 2)),
+  (double y) => -2 * y * exp(pow(-1 * y, 2)),
+);
