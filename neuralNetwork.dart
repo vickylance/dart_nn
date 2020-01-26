@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import './matrix.dart';
 import './activation.dart';
 
@@ -102,7 +104,7 @@ class NeuralNetwork {
     this.activation_function = activation_function;
   }
 
-  NeuralNetwork clone () {
+  NeuralNetwork clone() {
     var clone = new NeuralNetwork(inputNodes, hiddenNodes, outputNodes);
     clone.weights_ih = Matrix.clone(weights_ih);
     clone.weights_ho = Matrix.clone(weights_ho);
@@ -111,5 +113,43 @@ class NeuralNetwork {
     clone.setLearningRate(learning_rate: learning_rate);
     clone.setActivationFunction(activation_function);
     return clone;
+  }
+
+  // serialize
+  Map<String, dynamic> toJson() {
+    return {
+      'inputNodes': inputNodes,
+      'hiddenNodes': hiddenNodes,
+      'outputNodes': outputNodes,
+      'weights_ih': Matrix.serialize(weights_ih),
+      'weights_ho': Matrix.serialize(weights_ho),
+      'bias_h': Matrix.serialize(bias_h),
+      'bias_o': Matrix.serialize(bias_o),
+      'learning_rate': learning_rate,
+      'activation_function': activation_function.name,
+    };
+  }
+
+  // deserialize
+  NeuralNetwork.fromJson(Map<String, dynamic> json) {
+    this.inputNodes = json['inputNodes'];
+    this.hiddenNodes = json['hiddenNodes'];
+    this.outputNodes = json['outputNodes'];
+    this.weights_ih = Matrix.deserialize(json['weights_ih']);
+    this.weights_ho = Matrix.deserialize(json['weights_ho']);
+    this.bias_h = Matrix.deserialize(json['bias_h']);
+    this.bias_o = Matrix.deserialize(json['bias_o']);
+    this.setLearningRate(learning_rate: json['learning_rate']);
+    this.setActivationFunction(ActivationFunctions[json['activation_function']]);
+  }
+
+  static String serialize(NeuralNetwork nn) {
+    return jsonEncode(nn);
+  }
+
+  static NeuralNetwork deserialize(String jsonString) {
+    Map nnMap = jsonDecode(jsonString);
+    var result = NeuralNetwork.fromJson(nnMap);
+    return result;
   }
 }

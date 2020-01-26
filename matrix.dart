@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:convert';
 import './utils.dart' as utils;
 
 // Matrix Class
@@ -171,5 +172,31 @@ class Matrix {
       m += '\n';
     }
     return m;
+  }
+
+  // serialize
+  Map<String, dynamic> toJson() {
+    return {
+      'rows': rows,
+      'cols': cols,
+      'matrix': List<dynamic>.from(matrix.map((x) => List<dynamic>.from(x.map((x) => x)))),
+    };
+  }
+
+  // deserialize
+  Matrix.fromJson(Map<String, dynamic> json) {
+    this.rows = json['rows'];
+    this.cols = json['cols'];
+    this.matrix = List<List<double>>.from(json["matrix"].map((x) => List<double>.from(x.map((x) => x.toDouble()))));
+  }
+
+  static String serialize(Matrix mat) {
+    return jsonEncode(mat);
+  }
+
+  static Matrix deserialize(String jsonString) {
+    Map mat = jsonDecode(jsonString);
+    var result = Matrix.fromJson(mat);
+    return result;
   }
 }
