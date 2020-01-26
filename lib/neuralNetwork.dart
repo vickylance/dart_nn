@@ -1,7 +1,6 @@
 import 'dart:convert';
-
-import './matrix.dart';
-import './activation.dart';
+import 'package:dart_nn/matrix.dart';
+import 'package:dart_nn/activation.dart';
 
 class NeuralNetwork {
   int inputNodes;
@@ -19,18 +18,18 @@ class NeuralNetwork {
     this.hiddenNodes = hiddenNodes;
     this.outputNodes = outputNodes;
 
-    this.weights_ih = Matrix(this.hiddenNodes, this.inputNodes);
-    this.weights_ho = Matrix(this.outputNodes, this.hiddenNodes);
-    this.weights_ih.randomize();
-    this.weights_ho.randomize();
+    weights_ih = Matrix(this.hiddenNodes, this.inputNodes);
+    weights_ho = Matrix(this.outputNodes, this.hiddenNodes);
+    weights_ih.randomize();
+    weights_ho.randomize();
 
-    this.bias_h = Matrix(this.hiddenNodes, 1);
-    this.bias_o = Matrix(this.outputNodes, 1);
-    this.bias_h.randomize();
-    this.bias_o.randomize();
+    bias_h = Matrix(this.hiddenNodes, 1);
+    bias_o = Matrix(this.outputNodes, 1);
+    bias_h.randomize();
+    bias_o.randomize();
 
-    this.setLearningRate();
-    this.setActivationFunction(Sigmoid);
+    setLearningRate();
+    setActivationFunction(Sigmoid);
   }
 
   List<double> predict(var input_array) {
@@ -48,7 +47,7 @@ class NeuralNetwork {
     return output_arr;
   }
 
-  train(var inputs_array, var targets) {
+  void train(var inputs_array, var targets) {
     var inputs = Matrix.fromArray(inputs_array);
 
     var hidden = Matrix.dotProduct(weights_ih, inputs);
@@ -83,7 +82,8 @@ class NeuralNetwork {
     var hidden_errors = Matrix.dotProduct(who_t, output_errors);
 
     // Calculate the input->hidden gradients
-    var hidden_gradient = Matrix.immutableMap(hidden, activation_function.dfunc);
+    var hidden_gradient =
+        Matrix.immutableMap(hidden, activation_function.dfunc);
     hidden_gradient.multiply(hidden_errors, hadamard: true);
     hidden_gradient.multiply(learning_rate);
 
@@ -96,16 +96,16 @@ class NeuralNetwork {
     bias_h.add(hidden_gradient);
   }
 
-  setLearningRate({learning_rate = 0.1}) {
+  void setLearningRate({learning_rate = 0.1}) {
     this.learning_rate = learning_rate;
   }
 
-  setActivationFunction(activation_function) {
+  void setActivationFunction(activation_function) {
     this.activation_function = activation_function;
   }
 
   NeuralNetwork clone() {
-    var clone = new NeuralNetwork(inputNodes, hiddenNodes, outputNodes);
+    var clone = NeuralNetwork(inputNodes, hiddenNodes, outputNodes);
     clone.weights_ih = Matrix.clone(weights_ih);
     clone.weights_ho = Matrix.clone(weights_ho);
     clone.bias_h = Matrix.clone(bias_h);
@@ -132,15 +132,15 @@ class NeuralNetwork {
 
   // deserialize
   NeuralNetwork.fromJson(Map<String, dynamic> json) {
-    this.inputNodes = json['inputNodes'];
-    this.hiddenNodes = json['hiddenNodes'];
-    this.outputNodes = json['outputNodes'];
-    this.weights_ih = Matrix.deserialize(json['weights_ih']);
-    this.weights_ho = Matrix.deserialize(json['weights_ho']);
-    this.bias_h = Matrix.deserialize(json['bias_h']);
-    this.bias_o = Matrix.deserialize(json['bias_o']);
-    this.setLearningRate(learning_rate: json['learning_rate']);
-    this.setActivationFunction(ActivationFunctions[json['activation_function']]);
+    inputNodes = json['inputNodes'];
+    hiddenNodes = json['hiddenNodes'];
+    outputNodes = json['outputNodes'];
+    weights_ih = Matrix.deserialize(json['weights_ih']);
+    weights_ho = Matrix.deserialize(json['weights_ho']);
+    bias_h = Matrix.deserialize(json['bias_h']);
+    bias_o = Matrix.deserialize(json['bias_o']);
+    setLearningRate(learning_rate: json['learning_rate']);
+    setActivationFunction(ActivationFunctions[json['activation_function']]);
   }
 
   static String serialize(NeuralNetwork nn) {

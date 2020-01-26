@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'dart:convert';
-import './utils.dart' as utils;
+import 'package:dart_nn/utils.dart' as utils;
 
 // Matrix Class
 class Matrix {
@@ -9,44 +9,45 @@ class Matrix {
   List<List<double>> matrix;
   Random rnd = Random();
 
-  Matrix(int rows, int cols, { int rngSeed = null }) {
+  Matrix(int rows, int cols, {int rngSeed}) {
     this.rows = rows;
     this.cols = cols;
-    if(rngSeed != null) {
+    if (rngSeed != null) {
       rnd = Random(rngSeed);
     }
-    this.matrix = List.generate(rows, (_) => List(cols));
-    this.ones();
+    matrix = List.generate(rows, (_) => List(cols));
+    ones();
   }
 
   static Matrix fromArray(List<double> arr) {
-    Matrix result = Matrix(arr.length, 1);
-    for(int i = 0; i < arr.length; i++) {
+    var result = Matrix(arr.length, 1);
+    for (var i = 0; i < arr.length; i++) {
       result.matrix[i][0] = arr[i];
     }
     return result;
   }
 
   static List<double> toArray(Matrix mat) {
-    List<double> result = [];
-    for(int i = 0; i < mat.rows; i++) {
-      for(int j = 0; j < mat.cols; j++) {
-        result.add(mat.matrix[i][j]);
+    var result = [];
+    for (var i = 0; i < mat.rows; i++) {
+      for (var j = 0; j < mat.cols; j++) {
+        var elem = mat.matrix[i][j];
+        result.add(elem);
       }
     }
-    return result;
+    return result.cast<double>();
   }
 
   static Matrix dotProduct(Matrix a, Matrix b) {
     // Dot product
-    if(a.cols != b.rows) {
-      throw ("The columns of A = ${a.cols} must match rows of B = ${b.rows}");
+    if (a.cols != b.rows) {
+      throw ('The columns of A = ${a.cols} must match rows of B = ${b.rows}');
     }
-    Matrix result = Matrix(a.rows, b.cols);
-    for(int i = 0; i < result.rows; i++) {
-      for(int j = 0; j < result.cols; j++) {
+    var result = Matrix(a.rows, b.cols);
+    for (var i = 0; i < result.rows; i++) {
+      for (var j = 0; j < result.cols; j++) {
         var sum = 0.0;
-        for(int k = 0; k < a.cols; k++) {
+        for (var k = 0; k < a.cols; k++) {
           sum += a.matrix[i][k] * b.matrix[k][j];
         }
         result.matrix[i][j] = sum;
@@ -56,9 +57,9 @@ class Matrix {
   }
 
   static Matrix clone(Matrix x) {
-    Matrix result = Matrix(x.rows, x.cols);
-    for(int i = 0; i < x.rows; i++) {
-      for(int j = 0; j < x.cols; j++) {
+    var result = Matrix(x.rows, x.cols);
+    for (var i = 0; i < x.rows; i++) {
+      for (var j = 0; j < x.cols; j++) {
         result.matrix[i][j] = x.matrix[i][j];
       }
     }
@@ -66,9 +67,9 @@ class Matrix {
   }
 
   static Matrix transpose(Matrix x) {
-    Matrix result = Matrix(x.cols, x.rows);
-    for(int i = 0; i < x.rows; i++) {
-      for(int j = 0; j < x.cols; j++) {
+    var result = Matrix(x.cols, x.rows);
+    for (var i = 0; i < x.rows; i++) {
+      for (var j = 0; j < x.cols; j++) {
         result.matrix[j][i] = x.matrix[i][j];
       }
     }
@@ -76,9 +77,9 @@ class Matrix {
   }
 
   static Matrix immutableMap(Matrix m, Function fn) {
-    Matrix result = Matrix(m.rows, m.cols);
-    for(int i = 0; i < m.rows; i++) {
-      for(int j = 0; j < m.cols; j++) {
+    var result = Matrix(m.rows, m.cols);
+    for (var i = 0; i < m.rows; i++) {
+      for (var j = 0; j < m.cols; j++) {
         result.matrix[i][j] = fn(m.matrix[i][j]);
       }
     }
@@ -86,8 +87,8 @@ class Matrix {
   }
 
   Matrix map(Function fn) {
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
+    for (var i = 0; i < rows; i++) {
+      for (var j = 0; j < cols; j++) {
         var val = matrix[i][j];
         matrix[i][j] = fn(val);
       }
@@ -95,10 +96,10 @@ class Matrix {
     return this;
   }
 
-  Matrix multiply(var val, { bool hadamard = false }) {
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
-        if(val is Matrix && hadamard) {
+  Matrix multiply(var val, {bool hadamard = false}) {
+    for (var i = 0; i < rows; i++) {
+      for (var j = 0; j < cols; j++) {
+        if (val is Matrix && hadamard) {
           // Hadamard product
           matrix[i][j] *= val.matrix[i][j];
         } else {
@@ -111,9 +112,9 @@ class Matrix {
   }
 
   Matrix add(var val) {
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
-        if(val is Matrix) {
+    for (var i = 0; i < rows; i++) {
+      for (var j = 0; j < cols; j++) {
+        if (val is Matrix) {
           matrix[i][j] += val.matrix[i][j];
         } else {
           matrix[i][j] += val;
@@ -124,9 +125,9 @@ class Matrix {
   }
 
   Matrix subtract(var val) {
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
-        if(val is Matrix) {
+    for (var i = 0; i < rows; i++) {
+      for (var j = 0; j < cols; j++) {
+        if (val is Matrix) {
           matrix[i][j] -= val.matrix[i][j];
         } else {
           matrix[i][j] -= val;
@@ -137,8 +138,8 @@ class Matrix {
   }
 
   Matrix ones() {
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
+    for (var i = 0; i < rows; i++) {
+      for (var j = 0; j < cols; j++) {
         matrix[i][j] = 1.0;
       }
     }
@@ -146,8 +147,8 @@ class Matrix {
   }
 
   Matrix zeros() {
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
+    for (var i = 0; i < rows; i++) {
+      for (var j = 0; j < cols; j++) {
         matrix[i][j] = 0.0;
       }
     }
@@ -155,19 +156,20 @@ class Matrix {
   }
 
   Matrix randomize() {
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
+    for (var i = 0; i < rows; i++) {
+      for (var j = 0; j < cols; j++) {
         matrix[i][j] = utils.map(rnd.nextDouble(), 0, 1, -1, 1);
       }
     }
     return this;
   }
 
+  @override
   String toString() {
-    String m = "";
-    for(int i = 0; i < rows; i++) {
-      for(int j = 0; j < cols; j++) {
-        m += matrix[i][j].toStringAsFixed(3) + ((j + 1 == cols) ? "" : ", ");
+    var m = '';
+    for (var i = 0; i < rows; i++) {
+      for (var j = 0; j < cols; j++) {
+        m += matrix[i][j].toStringAsFixed(3) + ((j + 1 == cols) ? '' : ', ');
       }
       m += '\n';
     }
@@ -179,15 +181,17 @@ class Matrix {
     return {
       'rows': rows,
       'cols': cols,
-      'matrix': List<dynamic>.from(matrix.map((x) => List<dynamic>.from(x.map((x) => x)))),
+      'matrix': List<dynamic>.from(
+          matrix.map((x) => List<dynamic>.from(x.map((x) => x)))),
     };
   }
 
   // deserialize
   Matrix.fromJson(Map<String, dynamic> json) {
-    this.rows = json['rows'];
-    this.cols = json['cols'];
-    this.matrix = List<List<double>>.from(json["matrix"].map((x) => List<double>.from(x.map((x) => x.toDouble()))));
+    rows = json['rows'];
+    cols = json['cols'];
+    matrix = List<List<double>>.from(json['matrix']
+        .map((x) => List<double>.from(x.map((x) => x.toDouble()))));
   }
 
   static String serialize(Matrix mat) {
