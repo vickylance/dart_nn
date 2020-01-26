@@ -156,9 +156,7 @@ class Matrix {
   Matrix randomize() {
     for(int i = 0; i < rows; i++) {
       for(int j = 0; j < cols; j++) {
-        var r = utils.map(rnd.nextDouble(), 0, 1, -1, 1);
-        print(r);
-        matrix[i][j] = r;
+        matrix[i][j] = utils.map(rnd.nextDouble(), 0, 1, -1, 1);
       }
     }
     return this;

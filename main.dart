@@ -28,4 +28,8 @@ void main() {
   for(int i = 0; i < train_data.length; i++) {
     print("Test: In: ${train_data[i]['inputs']} ${brain.predict(train_data[i]['inputs'])}");
   }
+  var brain2 = brain.clone();
+  for(int i = 0; i < train_data.length; i++) {
+    print("Test: In: ${train_data[i]['inputs']} ${brain2.predict(train_data[i]['inputs'])}");
+  }
 }

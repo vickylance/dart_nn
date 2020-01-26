@@ -101,4 +101,15 @@ class NeuralNetwork {
   setActivationFunction(activation_function) {
     this.activation_function = activation_function;
   }
+
+  NeuralNetwork clone () {
+    var clone = new NeuralNetwork(inputNodes, hiddenNodes, outputNodes);
+    clone.weights_ih = Matrix.clone(weights_ih);
+    clone.weights_ho = Matrix.clone(weights_ho);
+    clone.bias_h = Matrix.clone(bias_h);
+    clone.bias_o = Matrix.clone(bias_o);
+    clone.setLearningRate(learning_rate: learning_rate);
+    clone.setActivationFunction(activation_function);
+    return clone;
+  }
 }
