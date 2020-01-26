@@ -1,4 +1,5 @@
 import 'dart:math';
+import './utils.dart' as utils;
 
 // Matrix Class
 class Matrix {
@@ -155,7 +156,9 @@ class Matrix {
   Matrix randomize() {
     for(int i = 0; i < rows; i++) {
       for(int j = 0; j < cols; j++) {
-        matrix[i][j] = rnd.nextDouble() * 2 - 1;
+        var r = utils.map(rnd.nextDouble(), 0, 1, -1, 1);
+        print(r);
+        matrix[i][j] = r;
       }
     }
     return this;
