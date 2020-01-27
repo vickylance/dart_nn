@@ -1,7 +1,7 @@
 name: dart_nn
 description: A simple Neural Network library written in dart.
-version: 1.0.0
-# homepage: https://www.example.com
+version: 1.0.1
+homepage: https://www.vickylance.com
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
