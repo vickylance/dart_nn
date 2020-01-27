@@ -1,6 +1,6 @@
 name: dart_nn
 description: A simple NeuralNetwork library. You can create a simple NeuralNetwork brain with any number of inputs, outputs and hidden nodes, but the hidden layer can only be of 1 layer.
-version: 1.0.2
+version: 1.0.3
 homepage: https://www.vickylance.com
 
 environment:
