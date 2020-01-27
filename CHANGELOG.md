@@ -24,3 +24,11 @@
 ## 1.0.3+2
 
 - Updated pubspec.yaml file.
+
+## 1.0.3+3
+
+- Fixed Iris example.
+
+## 1.0.4
+
+- Added ability to define different activation functions for hidden and output layer.

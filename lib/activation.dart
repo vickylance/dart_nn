@@ -21,8 +21,14 @@ Activation Sigmoid = Activation(
 
 Activation Relu = Activation(
   'Relu',
-  (double x) => x < 0 ? 0.0 : x,
-  (double y) => y < 0 ? 0.0 : 1.0,
+  (double x) => x <= 0 ? 0.0 : x,
+  (double y) => y <= 0 ? 0.0 : 1.0,
+);
+
+Activation LeakyRelu = Activation(
+  'LeakyRelu',
+  (double x) => x < 0 ? 0.01 * x : x,
+  (double y) => y < 0 ? 0.01 : 1.0,
 );
 
 Activation TanH = Activation(

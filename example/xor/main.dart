@@ -4,6 +4,7 @@ import 'package:dart_nn/neuralNetwork.dart';
 
 void main(List<String> arguments) {
   var brain = NeuralNetwork(2, 3, 1);
+  brain.setLearningRate(learning_rate: 0.1);
 
   // XOR training data
   var train_data = [
@@ -24,7 +25,7 @@ void main(List<String> arguments) {
       'outputs': [1.0],
     }
   ];
-  var epoch = 50000;
+  var epoch = 500000;
 
   var rnd = Random();
   for (var i = 0; i < epoch; i++) {

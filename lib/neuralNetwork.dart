@@ -11,7 +11,7 @@ class NeuralNetwork {
   Matrix bias_h;
   Matrix bias_o;
   double learning_rate;
-  Activation activation_function;
+  List<Activation> activation_functions;
 
   NeuralNetwork(int inputNodes, int hiddenNodes, int outputNodes) {
     this.inputNodes = inputNodes;
@@ -29,18 +29,18 @@ class NeuralNetwork {
     bias_o.randomize();
 
     setLearningRate();
-    setActivationFunction(Sigmoid);
+    setActivationFunction([Relu, Sigmoid]);
   }
 
   List<double> predict(var input_array) {
     var inputs = Matrix.fromArray(input_array);
     var hidden = Matrix.dotProduct(weights_ih, inputs);
     hidden.add(bias_h);
-    hidden.map(activation_function.func);
+    hidden.map(activation_functions[0].func);
 
     var output = Matrix.dotProduct(weights_ho, hidden);
     output.add(bias_o);
-    output.map(activation_function.func);
+    output.map(activation_functions[1].func);
 
     var output_arr = Matrix.toArray(output);
 
@@ -52,11 +52,11 @@ class NeuralNetwork {
 
     var hidden = Matrix.dotProduct(weights_ih, inputs);
     hidden.add(bias_h);
-    hidden.map(activation_function.func);
+    hidden.map(activation_functions[0].func);
 
     var outputs = Matrix.dotProduct(weights_ho, hidden);
     outputs.add(bias_o);
-    outputs.map(activation_function.func);
+    outputs.map(activation_functions[1].func);
 
     // Convert arr to matrix object
     targets = Matrix.fromArray(targets);
@@ -65,7 +65,7 @@ class NeuralNetwork {
     var output_errors = targets.subtract(outputs);
 
     // Calculate the hidden->output gradients
-    var gradients = Matrix.immutableMap(outputs, activation_function.dfunc);
+    var gradients = Matrix.immutableMap(outputs, activation_functions[1].dfunc);
     gradients.multiply(output_errors, hadamard: true);
     gradients.multiply(learning_rate);
 
@@ -83,7 +83,7 @@ class NeuralNetwork {
 
     // Calculate the input->hidden gradients
     var hidden_gradient =
-        Matrix.immutableMap(hidden, activation_function.dfunc);
+        Matrix.immutableMap(hidden, activation_functions[0].dfunc);
     hidden_gradient.multiply(hidden_errors, hadamard: true);
     hidden_gradient.multiply(learning_rate);
 
@@ -100,8 +100,8 @@ class NeuralNetwork {
     this.learning_rate = learning_rate;
   }
 
-  void setActivationFunction(activation_function) {
-    this.activation_function = activation_function;
+  void setActivationFunction(activation_functions) {
+    this.activation_functions = activation_functions;
   }
 
   NeuralNetwork clone() {
@@ -111,7 +111,7 @@ class NeuralNetwork {
     clone.bias_h = Matrix.clone(bias_h);
     clone.bias_o = Matrix.clone(bias_o);
     clone.setLearningRate(learning_rate: learning_rate);
-    clone.setActivationFunction(activation_function);
+    clone.setActivationFunction(activation_functions);
     return clone;
   }
 
@@ -126,7 +126,10 @@ class NeuralNetwork {
       'bias_h': Matrix.serialize(bias_h),
       'bias_o': Matrix.serialize(bias_o),
       'learning_rate': learning_rate,
-      'activation_function': activation_function.name,
+      'activation_functions': [
+        activation_functions[0].name,
+        activation_functions[1].name
+      ],
     };
   }
 
@@ -140,7 +143,10 @@ class NeuralNetwork {
     bias_h = Matrix.deserialize(json['bias_h']);
     bias_o = Matrix.deserialize(json['bias_o']);
     setLearningRate(learning_rate: json['learning_rate']);
-    setActivationFunction(ActivationFunctions[json['activation_function']]);
+    setActivationFunction([
+      ActivationFunctions[json['activation_functions'][0]],
+      ActivationFunctions[json['activation_functions'][1]]
+    ]);
   }
 
   static String serialize(NeuralNetwork nn) {
