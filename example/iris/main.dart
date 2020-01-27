@@ -51,7 +51,7 @@ void main(List<String> arguments) async {
   brain.setLearningRate(learning_rate: 0.001);
   var epoch = 1000000;
 
-  var path = './examples/iris/iris.data';
+  var path = './example/iris/iris.data';
   var inputs = [];
   var outputs = [];
   await File(path)
