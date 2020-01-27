@@ -1,5 +1,5 @@
 name: dart_nn
-description: A simple NeuralNetwork library written in dart. You can create a simple NeuralNetwork brain with any number of inputs, outputs and hidden nodes, but the hidden layer can only be of 1 layer and then train the brain using training data.
+description: A simple NeuralNetwork library. You can create a simple NeuralNetwork brain with any number of inputs, outputs and hidden nodes, but the hidden layer can only be of 1 layer.
 version: 1.0.2
 homepage: https://www.vickylance.com
 
