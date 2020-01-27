@@ -1,6 +1,6 @@
 # dart_nn
 
-[![Run on Repl.it](https://repl.it/badge/github/vickylance/dart_nn)](https://repl.it/github/vickylance/dart_nn)
+[![Run on Repl.it](https://repl.it/badge/github/vickylance/dart_nn)](https://repl.it/github/vickylance/dart_nn) ![Pub Version](https://img.shields.io/pub/v/dart_nn)
 
 A Simple Neural Network library written in dart.
 

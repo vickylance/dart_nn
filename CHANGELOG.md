@@ -7,12 +7,20 @@
 
 ## 1.0.1
 
-- Fixed file naming in example
+- Fixed file naming in example.
 
 ## 1.0.2
 
-- Added README to example folder
+- Added README to example folder.
 
 ## 1.0.3
 
-- Fixed package description
+- Fixed package description.
+
+## 1.0.3+1
+
+- Updated pubspec.yaml file.
+
+## 1.0.3+2
+
+- Updated pubspec.yaml file.
