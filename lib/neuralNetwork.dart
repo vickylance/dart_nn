@@ -47,8 +47,27 @@ class NeuralNetwork {
     return output_arr;
   }
 
-  void train(var inputs_array, var targets) {
+  void train(var inputs_array, var targets_array) {
+    //  Steps:-
+    //  1. Get input array convert to matrix
+    //  2. Forward propagate
+    //    2.1 Dot product previous matrix with hidden matrix
+    //    2.2 Add hidden bias
+    //    2.3 Apply activation function
+    //    2.4 Repeat 2.1 -> 2.3 until you reach output matrix
+    //  3. Calculate the output error
+    //  4. Back propagate
+    //    4.1 Apply derivate activation function to the last layer.
+    //    4.2 Hadamard product by the errors
+    //    4.3 Scalar product by the learning rate
+    //    4.4 Transpose the last before layer
+    //    4.5 Dot product of output of 4.3 with 4.4
+    //    4.6 Add the last weights matrix with output of 4.5
+    //    4.7 Add the last bias matrix with the output of 4.3
+
+    // Convert arr to matrix object
     var inputs = Matrix.fromArray(inputs_array);
+    var targets = Matrix.fromArray(targets_array);
 
     var hidden = Matrix.dotProduct(weights_ih, inputs);
     hidden.add(bias_h);
@@ -57,9 +76,6 @@ class NeuralNetwork {
     var outputs = Matrix.dotProduct(weights_ho, hidden);
     outputs.add(bias_o);
     outputs.map(activation_functions[1].func);
-
-    // Convert arr to matrix object
-    targets = Matrix.fromArray(targets);
 
     // Calculate the output error
     var output_errors = targets.subtract(outputs);
