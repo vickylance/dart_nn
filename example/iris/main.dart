@@ -2,8 +2,7 @@ import 'dart:math';
 import 'dart:io';
 import 'dart:convert';
 import 'package:csv/csv.dart';
-import 'package:dart_nn/activation.dart';
-import 'package:dart_nn/neuralNetwork.dart';
+import 'package:dart_nn/nn.dart';
 
 List<double> petalType(String petal) {
   switch (petal) {
@@ -48,9 +47,12 @@ double accuracy(List<bool> results, {bool debug = false}) {
 
 void main(List<String> arguments) async {
   var rnd = Random();
-  var brain = NeuralNetwork(4, 8, 3);
-  brain.setLearningRate(learning_rate: 0.01);
-  brain.setActivationFunction([LeakyRelu, Sigmoid]);
+  var brain = NeuralNetwork(
+      4,
+      [Layer(8, 'Relu'), Layer(5, 'Relu'), Layer(8, 'Relu')],
+      Layer(3, 'Sigmoid'));
+  brain.setLearningRate(learning_rate: 0.001);
+  brain.setActivationFunction([Sigmoid]);
   var epoch = 1000000;
 
   var path = './example/iris/iris.data';

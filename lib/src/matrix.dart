@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'dart:convert';
-import 'package:dart_nn/utils.dart' as utils;
+import 'package:dart_nn/src/utils.dart' as utils;
 
 // Matrix Class
 class Matrix {
