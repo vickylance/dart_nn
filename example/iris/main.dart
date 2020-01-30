@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:io';
 import 'dart:convert';
 import 'package:csv/csv.dart';
-import 'package:dart_nn/nn.dart';
+import 'package:dart_nn/dart_nn.dart';
 
 List<double> petalType(String petal) {
   switch (petal) {

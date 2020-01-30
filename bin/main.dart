@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:dart_nn/nn.dart';
+import 'package:dart_nn/dart_nn.dart';
 
 void main(List<String> arguments) {
   var brain = NeuralNetwork(

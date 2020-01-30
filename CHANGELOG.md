@@ -32,3 +32,7 @@
 ## 1.0.4
 
 - Added ability to define different activation functions for hidden and output layer.
+
+## 2.0.0
+
+- Added ability to define multilayered neural network
