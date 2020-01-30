@@ -49,10 +49,9 @@ void main(List<String> arguments) async {
   var rnd = Random();
   var brain = NeuralNetwork(
       4,
-      [Layer(8, 'Relu'), Layer(5, 'Relu'), Layer(8, 'Relu')],
+      [Layer(8, 'Sigmoid'), Layer(5, 'Sigmoid'), Layer(8, 'Sigmoid')],
       Layer(3, 'Sigmoid'));
   brain.setLearningRate(learning_rate: 0.001);
-  brain.setActivationFunction([Sigmoid]);
   var epoch = 1000000;
 
   var path = './example/iris/iris.data';
@@ -77,7 +76,6 @@ void main(List<String> arguments) async {
   var total = inputs.length;
   while ((total - inputs.length) / total < train_test_split) {
     var d = rnd.nextInt(inputs.length);
-    // print('$d, ${inputs[d]}, ${inputs.length}, ${outputs[d]}');
     train_inputs.add(inputs.removeAt(d));
     train_outputs.add(outputs.removeAt(d));
   }
