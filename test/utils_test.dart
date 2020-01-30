@@ -1,4 +1,4 @@
-import 'package:dart_nn/utils.dart';
+import 'package:dart_nn/nn.dart';
 import 'package:test/test.dart';
 
 void main() {

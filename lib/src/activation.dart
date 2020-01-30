@@ -64,6 +64,7 @@ Activation Gaussian = Activation(
 var ActivationFunctions = {
   'Sigmoid': Sigmoid,
   'Relu': Relu,
+  'LeakyRelu': LeakyRelu,
   'TanH': TanH,
   'ArcTan': ArcTan,
   'ArcSinH': ArcSinH,
