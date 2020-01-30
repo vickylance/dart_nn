@@ -36,3 +36,7 @@
 ## 2.0.0
 
 - Added ability to define multilayered neural network
+
+## 2.0.0+1
+
+- Update to description
