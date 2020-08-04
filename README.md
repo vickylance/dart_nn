@@ -73,3 +73,5 @@ var brain3 = NeuralNetwork.deserialize(brain2serialized);
 ## License
 
 [license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fvickylance%2Fdart_nn.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fvickylance%2Fdart_nn?ref=badge_large)
